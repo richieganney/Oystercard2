@@ -14,7 +14,7 @@ describe Oystercard do
       expect(subject.balance).to eq 20
     end
   end
-  
+
   describe "#top_up" do
     it "raises an error if combined balance > 90.00" do
       card = Oystercard.new
@@ -30,4 +30,27 @@ describe Oystercard do
     end
   end
 
+  describe "#touch_in" do
+    it "returns the in use status of the oystercard" do
+      expect(subject.touch_in).to eq true
+    end
+  end
+
+  describe "#touch_out" do
+    it "returns not in use status of the oystercard" do
+      expect(subject.touch_out).to eq false
+    end
+  end
+
+  describe "#in_journey?" do
+    it "returns the oyestercard is in use" do
+      subject.touch_in
+      expect(subject.in_journey?).to eq true
+    end
+
+    it "returns the oystercard is not in use" do
+      subject.touch_out
+      expect(subject.in_journey?).to eq false
+    end
+  end
 end
