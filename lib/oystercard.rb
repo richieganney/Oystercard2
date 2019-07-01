@@ -6,4 +6,8 @@ attr_accessor :balance
     @balance = balance
   end
 
+  def top_up(amount)
+    self.balance += 20.00
+  end
+
 end
