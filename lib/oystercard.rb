@@ -17,4 +17,8 @@ BALANCE_LIMIT = 90
     amount + self.balance > BALANCE_LIMIT
   end
 
+  def deduct(amount)
+    self.balance -= amount
+  end
+
 end

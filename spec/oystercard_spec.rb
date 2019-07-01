@@ -22,4 +22,12 @@ describe Oystercard do
     end
   end
 
+  describe "#deduct" do
+    it "it deducts a given amount from the current balance" do
+      subject.top_up(20)
+      subject.deduct(2)
+      expect(subject.balance).to eq(18)
+    end
+  end
+
 end
