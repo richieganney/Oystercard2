@@ -23,6 +23,7 @@ MINIMUM_FARE_LIMIT = 1
   end
 
   def touch_in
+    minimum_fare_check
     @in_use = true
   end
 
@@ -32,12 +33,6 @@ MINIMUM_FARE_LIMIT = 1
 
   def in_journey?
     @in_use
-  end
-
-  def check_touch_in_out
-    if touch_in
-      minimum_fare_check
-    end
   end
 
   def minimum_fare_check

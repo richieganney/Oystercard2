@@ -31,11 +31,19 @@ describe Oystercard do
     end
 
     describe "#touch_in" do
-      it "returns the in use status of the oystercard" do
-        subject.top_up(20)
-        expect(subject.touch_in).to eq true
+      context "with sufficient funds" do
+        it "returns the in use status of the oystercard" do
+          subject.top_up(20)
+          expect(subject.touch_in).to eq true
+        end
       end
     end
+
+      context "with insufficient funds" do
+        it "returns the in use status of the oystercard" do
+          expect { subject.touch_in }.to raise_error "Not enough funds, minimum balance required 1"
+        end
+      end
 
     describe "#touch_out" do
       it "returns not in use status of the oystercard" do
@@ -45,6 +53,7 @@ describe Oystercard do
 
     describe "#in_journey?" do
       it "returns the oyestercard is in use" do
+        subject.top_up(20)
         subject.touch_in
         expect(subject.in_journey?).to eq true
       end
@@ -55,15 +64,9 @@ describe Oystercard do
       end
     end
 
-    describe "#check_touch_in_&_out" do
-      it "returns error if not enough funds" do
-        expect {subject.check_touch_in_out}.to raise_error "Not enough funds, minimum balance required 1"
-      end
-    end
-
     describe "#minimum_fare_check" do
       it "raise an error if balance is less than 1" do
-        expect {subject.minimum_fare_check}.to raise_error "Not enough funds, minimum balance required 1"
+        expect { subject.minimum_fare_check }.to raise_error "Not enough funds, minimum balance required 1"
       end
     end
 end
