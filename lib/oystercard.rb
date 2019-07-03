@@ -1,42 +1,35 @@
-class Oystercard
+class OysterCard
+  attr_reader :balance, :entry_station
+  DEFAULT_LIMIT = 90
+  MINIMUM_FARE = 1
 
-attr_accessor :balance
-
-BALANCE_LIMIT = 90
-MINIMUM_FARE_LIMIT = 1
-
-  def initialize(balance=0)
-    @balance = balance
+  def initialize
+    @entry_station
+    @balance = 0
   end
 
   def top_up(amount)
-    raise("amount exceeded, balance cannot be: #{amount + self.balance}. Balance limit is 90") if balance_check(amount)
-    self.balance += amount
+    raise 'Top-Up Limit Reached!' if @balance + amount  >= DEFAULT_LIMIT
+    @balance += amount
   end
 
-  def balance_check(amount)
-    amount + self.balance > BALANCE_LIMIT
+  def touch_in(station)
+    raise "Insufficent funds" if @balance < MINIMUM_FARE
+    @entry_station = station
   end
+
+  def touch_out(station)
+    deduct(MINIMUM_FARE)
+    @entry_station = nil
+  end
+
+  def journey?
+    !!entry_station
+  end
+
+  private
 
   def deduct(amount)
-    self.balance -= amount
-  end
-
-  def touch_in
-    minimum_fare_check
-    @in_use = true
-  end
-
-  def touch_out(amount)
-    deduct(amount)
-    @in_use = false
-  end
-
-  def in_journey?
-    @in_use
-  end
-
-  def minimum_fare_check
-    raise "Not enough funds, minimum balance required 1" if self.balance < MINIMUM_FARE_LIMIT
+    @balance -= amount
   end
 end
