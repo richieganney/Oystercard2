@@ -47,7 +47,12 @@ describe Oystercard do
 
     describe "#touch_out" do
       it "returns not in use status of the oystercard" do
-        expect(subject.touch_out).to eq false
+        expect(subject.touch_out(10)).to eq false
+      end
+
+      it "deducts the fare after touched out" do
+        subject.top_up(20)
+        expect{subject.touch_out(1)}.to change {subject.balance}.by(-1)
       end
     end
 
@@ -59,7 +64,7 @@ describe Oystercard do
       end
 
       it "returns the oystercard is not in use" do
-        subject.touch_out
+        subject.touch_out(10)
         expect(subject.in_journey?).to eq false
       end
     end

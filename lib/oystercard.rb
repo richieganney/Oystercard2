@@ -27,7 +27,8 @@ MINIMUM_FARE_LIMIT = 1
     @in_use = true
   end
 
-  def touch_out
+  def touch_out(amount)
+    deduct(amount)
     @in_use = false
   end
 
