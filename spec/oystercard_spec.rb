@@ -30,17 +30,6 @@ describe OysterCard do
     end
   end
 
-  describe '#touch_in' do
-    it 'it confirms touch in on journey' do
-      subject.top_up(20)
-      expect(subject.touch_in(entry_station)).to eq entry_station
-    end
-
-    it 'checks there is enough balance for minimum fare' do
-      expect{ subject.touch_in(entry_station)}.to raise_error "Insufficent funds"
-    end
-  end
-
   describe '#touch_out' do
     it 'confirms touch out to end journey' do
       expect(subject.touch_out(entry_station, exit_station)).to eq nil
