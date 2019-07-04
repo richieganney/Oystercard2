@@ -20,9 +20,16 @@ describe Journey do
       expect(subject.journey_complete?).to eq true
     end
   end
-  # describe "#fare" do
-  #   it "calculates the fare" do
-  #
-  #   end
-  # end
+
+  describe "#fare" do
+    it "gives the mimmum fare" do
+      expect(subject.fare).to eq Journey::MINIMUM_FARE
+    end
+  end
+
+  describe "#penalty_fare" do
+    it "calculates the penalty given if user touches in or out twice in a row" do
+      expect(subject.penalty_fare).to eq Journey::PENALTY_FARE 
+    end
+  end
 end

@@ -39,6 +39,13 @@ describe OysterCard do
     it 'checks there is enough balance for minimum fare' do
       expect{ subject.touch_in(entry_station)}.to raise_error "Insufficent funds"
     end
+
+    it 'charges a penalty fare if user touches in twice' do
+      station = double(:station)
+      subject.top_up 50
+      subject.touch_in station
+      expect{subject.touch_in station}.to change{ subject.balance }.by(-OysterCard::PENALTY_FARE)
+    end
   end
 
   describe '#touch_out' do
@@ -47,7 +54,7 @@ describe OysterCard do
       allow(entry_station).to receive(:zone) {1}
       allow(exit_station).to receive(:name) {"Victoria"}
       allow(exit_station).to receive(:zone) {1}
-      expect(subject.touch_out(entry_station, exit_station)).to eq nil
+      expect(subject.touch_out(entry_station, exit_station)).to eq false
     end
 
     it 'charges minimum fare for journey when touch out' do
@@ -56,6 +63,7 @@ describe OysterCard do
       allow(entry_station).to receive(:zone) {1}
       allow(exit_station).to receive(:name) {"Victoria"}
       allow(exit_station).to receive(:zone) {1}
+      subject.touch_in entry_station
       expect{subject.touch_out(entry_station, exit_station)}.to change{subject.balance}.by(-OysterCard::MINIMUM_FARE)
     end
 
@@ -68,6 +76,13 @@ describe OysterCard do
       subject.touch_in(entry_station)
       subject.touch_out(entry_station, exit_station)
       expect(subject.journeys).to eq [{:entry_station_name=>"Victoria", :entry_station_zone=>1, :exit_station_name=>"Aldgate", :exit_station_zone=>2}]
+    end
+
+    it 'charges a penalty fare if user touches out twice' do
+      allow(exit_station).to receive(:name) {"Aldgate"}
+      allow(exit_station).to receive(:zone) {2}
+      subject.top_up 50
+      expect{subject.touch_out exit_station, exit_station}.to change{ subject.balance }.by (-OysterCard::PENALTY_FARE)
     end
   end
 
