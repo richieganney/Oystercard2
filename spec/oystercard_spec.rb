@@ -7,7 +7,7 @@ describe OysterCard do
 
   describe '.journeys' do
     it "starts with an empty list" do
-      expect(subject.journeys).to be_empty
+      expect(subject.journey_log.log_journey).to be_empty
     end
   end
 
@@ -75,7 +75,7 @@ describe OysterCard do
       subject.top_up(20)
       subject.touch_in(entry_station)
       subject.touch_out(entry_station, exit_station)
-      expect(subject.journeys).to eq [{:entry_station_name=>"Victoria", :entry_station_zone=>1, :exit_station_name=>"Aldgate", :exit_station_zone=>2}]
+      expect(subject.journey_log.log_journey).to eq [{:entry_station_name=>"Victoria", :entry_station_zone=>1, :exit_station_name=>"Aldgate", :exit_station_zone=>2}]
     end
 
     it 'charges a penalty fare if user touches out twice' do
