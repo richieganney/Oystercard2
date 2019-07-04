@@ -43,19 +43,31 @@ describe OysterCard do
 
   describe '#touch_out' do
     it 'confirms touch out to end journey' do
+      allow(entry_station).to receive(:name) {"Victoria"}
+      allow(entry_station).to receive(:zone) {1}
+      allow(exit_station).to receive(:name) {"Victoria"}
+      allow(exit_station).to receive(:zone) {1}
       expect(subject.touch_out(entry_station, exit_station)).to eq nil
     end
 
     it 'charges minimum fare for journey when touch out' do
       subject.top_up(10)
+      allow(entry_station).to receive(:name) {"Victoria"}
+      allow(entry_station).to receive(:zone) {1}
+      allow(exit_station).to receive(:name) {"Victoria"}
+      allow(exit_station).to receive(:zone) {1}
       expect{subject.touch_out(entry_station, exit_station)}.to change{subject.balance}.by(-OysterCard::MINIMUM_FARE)
     end
 
     it "stores the journey's entry and exits stations" do
+      allow(entry_station).to receive(:name) {"Victoria"}
+      allow(entry_station).to receive(:zone) {1}
+      allow(exit_station).to receive(:name) {"Aldgate"}
+      allow(exit_station).to receive(:zone) {2}
       subject.top_up(20)
       subject.touch_in(entry_station)
       subject.touch_out(entry_station, exit_station)
-      expect(subject.journeys).to include(journey)
+      expect(subject.journeys).to eq [{:entry_station_name=>"Victoria", :entry_station_zone=>1, :exit_station_name=>"Aldgate", :exit_station_zone=>2}]
     end
   end
 
@@ -66,6 +78,10 @@ describe OysterCard do
       expect(subject.journey?).to eq true
     end
     it 'confirms oystercard is not in use' do
+      allow(entry_station).to receive(:name) {"Victoria"}
+      allow(entry_station).to receive(:zone) {1}
+      allow(exit_station).to receive(:name) {"Aldgate"}
+      allow(exit_station).to receive(:zone) {2}
       subject.touch_out(entry_station, exit_station)
       expect(subject.journey?).to eq false
     end
