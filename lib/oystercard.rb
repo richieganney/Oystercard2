@@ -3,7 +3,7 @@ require_relative 'station'
 require_relative 'journey'
 
 class OysterCard
-  attr_reader :balance, :journeys, :entry_station, :exit_station, :journey_log
+  attr_reader :balance, :journey, :journey_log, :entry_station, :exit_station
   DEFAULT_LIMIT = 90
   MINIMUM_FARE = 1
   PENALTY_FARE = 6  
@@ -26,8 +26,9 @@ class OysterCard
   end
 
   def touch_out(entry_station, exit_station)
-    @journey.journey == false ? penalty_fare : deduct
+    penalty_fare if @journey.journey == false
     @journey_log.log_journey << {entry_station_name: entry_station.name, entry_station_zone: entry_station.zone, exit_station_name: exit_station.name, exit_station_zone: exit_station.zone}
+    deduct
     @entry_station = nil
     @journey.end_journey
   end
@@ -39,7 +40,7 @@ class OysterCard
   private
 
   def deduct
-    @balance -= @journey.fare
+    @balance -= @journey_log.fare
   end
 
   def penalty_fare
@@ -48,4 +49,4 @@ class OysterCard
 
 end
 
-binding.pry
+# binding.pry
