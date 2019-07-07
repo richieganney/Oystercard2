@@ -8,4 +8,6 @@ class JourneyLog
     @all_journeys
   end
 
+  
+
 end
